@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:aronets_test_task_eclipse/data/models/post_model.dart';
 import 'package:aronets_test_task_eclipse/repository/repository.dart';
 import 'package:bloc/bloc.dart';
@@ -7,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 part 'post_event.dart';
-
 part 'post_state.dart';
 
 class PostBloc extends Bloc<PostEvent, PostState> {
