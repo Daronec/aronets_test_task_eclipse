@@ -16,7 +16,7 @@ class UsersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => UsersBloc()..add(InitialUsersEvent()),
+      create: (_) => UsersBloc()..add(InitialUsersEvent()),
       child: SafeArea(
         top: false,
         child: Scaffold(

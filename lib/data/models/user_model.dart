@@ -1,19 +1,11 @@
-// To parse this JSON data, do
-//
-//     final userModel = userModelFromJson(jsonString);
-
 import 'dart:convert';
 
 import 'package:aronets_test_task_eclipse/data/models/working_model.dart';
+import 'package:hive/hive.dart';
 
-List<UserModel> userListModelFromJson(String str) =>
-    List<UserModel>.from(json.decode(str).map((x) => UserModel.fromJson(x)));
+part 'user_model.g.dart';
 
-UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
-
-String userModelToJson(List<UserModel> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
+@HiveType(typeId: 4)
 class UserModel {
   UserModel({
     this.id,
@@ -34,7 +26,7 @@ class UserModel {
         phone: json["phone"],
         website: json["website"],
         photo: json["photo"],
-        working: Working.fromJson(json["working"]),
+        working: WorkingModel.fromJson(json["working"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -48,12 +40,28 @@ class UserModel {
         "working": working!.toJson(),
       };
 
+  @HiveField(0)
   final int? id;
+  @HiveField(1)
   final String? username;
+  @HiveField(2)
   final String? name;
+  @HiveField(3)
   final String? email;
+  @HiveField(4)
   final String? phone;
+  @HiveField(5)
   final String? website;
+  @HiveField(6)
   final String? photo;
-  final Working? working;
+  @HiveField(7)
+  final WorkingModel? working;
 }
+
+List<UserModel> userListModelFromJson(String str) =>
+    List<UserModel>.from(json.decode(str).map((x) => UserModel.fromJson(x)));
+
+UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
+
+String userModelToJson(List<UserModel> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));

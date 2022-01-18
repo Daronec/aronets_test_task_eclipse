@@ -1,4 +1,4 @@
-import 'package:aronets_test_task_eclipse/data/models/photo_model.dart';
+import 'package:aronets_test_task_eclipse/data/models/album_model.dart';
 import 'package:aronets_test_task_eclipse/data/models/post_model.dart';
 import 'package:aronets_test_task_eclipse/data/models/user_model.dart';
 import 'package:aronets_test_task_eclipse/repository/repository.dart';
@@ -30,7 +30,7 @@ class DetailsUserBloc extends Bloc<DetailsUserEvent, DetailsUserState> {
     try {
       user = await repository.getUserid(id: id);
       postList = await repository.getPosts();
-      albumsList = await repository.getPhotos();
+      albumsList = await repository.getAlbums();
     } on Exception catch (ex) {
       emit(ErrorDetailsUserState(error: ex.toString()));
     }

@@ -1,4 +1,4 @@
-import 'package:aronets_test_task_eclipse/data/models/photo_model.dart';
+import 'package:aronets_test_task_eclipse/data/models/album_model.dart';
 import 'package:aronets_test_task_eclipse/screens/albums_screen/screen.dart';
 import 'package:aronets_test_task_eclipse/styles/app_colors.dart';
 import 'package:aronets_test_task_eclipse/styles/app_text_style.dart';

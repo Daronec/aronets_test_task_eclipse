@@ -13,7 +13,7 @@ class Comments extends StatelessWidget {
     required this.commentList,
   }) : super(key: key);
 
-  final List<Comment>? commentList;
+  final List<CommentModel>? commentList;
 
   @override
   Widget build(BuildContext context) {

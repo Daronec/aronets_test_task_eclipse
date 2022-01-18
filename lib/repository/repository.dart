@@ -1,33 +1,65 @@
-import 'package:aronets_test_task_eclipse/data/models/photo_model.dart';
+import 'package:aronets_test_task_eclipse/data/models/album_model.dart';
 import 'package:aronets_test_task_eclipse/data/models/post_model.dart';
 import 'package:aronets_test_task_eclipse/data/models/user_model.dart';
 import 'package:aronets_test_task_eclipse/data/rest_api_service.dart';
+import 'package:hive/hive.dart';
 
 class Repository {
   final restApiService = RestApiService();
+  Box<AlbumsModel> albumBox = Hive.box('album_box');
+  Box<PostModel> postBox = Hive.box('post_box');
+  Box<UserModel> userBox = Hive.box('user_box');
 
   Future<List<UserModel>> getUsers() async {
-    return await restApiService.getUsers();
+    if (userBox.values.isNotEmpty) {
+      return userBox.values.toList();
+    } else {
+      final users = await restApiService.getUsers();
+      userBox.addAll(users);
+      return users;
+    }
   }
 
   Future<List<UserModel>> refreshUsers() async {
-    return await restApiService.refreshUsers();
+    final users = await restApiService.refreshUsers();
+    userBox.putAll(users.asMap());
+    return users;
   }
 
   Future<UserModel> getUserid({required int id}) async {
-    return await restApiService.getUserId(id: id);
+    if (userBox.values.isNotEmpty) {
+      return userBox.values.elementAt(id);
+    } else {
+      return await restApiService.getUserId(id: id);
+    }
   }
 
   Future<List<PostModel>> getPosts() async {
-    return await restApiService.getPosts();
+    if (postBox.values.isNotEmpty) {
+      return postBox.values.toList();
+    } else {
+      final posts = await restApiService.getPosts();
+      postBox.addAll(posts);
+      return posts;
+    }
   }
 
   Future<PostModel> getPostId({required int id}) async {
-    return await restApiService.getPostId(id: id);
+    if (postBox.values.isNotEmpty) {
+      return postBox.values.elementAt(id);
+    } else {
+      return await restApiService.getPostId(id: id);
+    }
   }
 
-  Future<List<AlbumsModel>> getPhotos() async {
-    return await restApiService.getPhotos();
+  Future<List<AlbumsModel>> getAlbums() async {
+    if (albumBox.values.isNotEmpty) {
+      return albumBox.values.toList();
+    } else {
+      final albums = await restApiService.getAlbums();
+      albumBox.addAll(albums);
+      return albums;
+    }
   }
 
   Future<String> addComment({
