@@ -7,51 +7,49 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 part 'post_event.dart';
+
 part 'post_state.dart';
 
 class PostBloc extends Bloc<PostEvent, PostState> {
   final repository = Repository();
-
-  PostBloc({
-    required this.id,
-  }) : super(InitialPostState());
   final int id;
   PostModel post = PostModel();
 
-  @override
-  Stream<PostState> mapEventToState(PostEvent event) async* {
-    if (event is InitialPostEvent) {
-      yield* _handleInitialDetailsUserEvent(event);
-    }
-    if (event is AddCommentPostEvent) {
-      yield* _handleAddCommentPostEvent(event);
-    }
+  PostBloc({
+    required this.id,
+  }) : super(InitialPostState()) {
+    on<InitialPostEvent>(_onInitialPostEvent);
+    on<AddCommentPostEvent>(_onAddCommentPostEvent);
   }
 
-  Stream<PostState> _handleInitialDetailsUserEvent(
-      InitialPostEvent event) async* {
-    yield LoadingPostState();
+  void _onInitialPostEvent(
+    InitialPostEvent event,
+    Emitter<PostState> emit,
+  ) async {
+    emit(LoadingPostState());
     try {
       post = await repository.getPostId(id: id);
     } on Exception catch (ex) {
-      yield ErrorPostState(error: ex.toString());
+      emit(ErrorPostState(error: ex.toString()));
     }
-    yield DataPostState(post: post);
+    emit(DataPostState(post: post));
   }
 
-  Stream<PostState> _handleAddCommentPostEvent(
-      AddCommentPostEvent event) async* {
-    yield LoadingPostState();
+  void _onAddCommentPostEvent(
+    AddCommentPostEvent event,
+    Emitter<PostState> emit,
+  ) async {
+    emit(LoadingPostState());
     try {
       final response = await repository.addComment(
         name: event.name,
         email: event.email,
         comment: event.comment,
       );
-      yield SuccessPostState(message: response.toString());
+      emit(SuccessPostState(message: response.toString()));
     } on Exception catch (_) {
-      yield const ErrorPostState(error: 'Не удалось отправить комментарий');
+      emit(const ErrorPostState(error: 'Не удалось отправить комментарий'));
     }
-    yield DataPostState(post: post);
+    emit(DataPostState(post: post));
   }
 }
